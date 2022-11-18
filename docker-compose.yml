@@ -1,0 +1,52 @@
+version: "3.9"
+   
+services:
+  db:
+    image: postgres
+    hostname: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  api:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    hostname: api
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - db
+
+  web:
+    build: ./frontend
+    hostname: web
+    environment:
+      - PORT=3000
+      - HOST=0.0.0.0
+      - NODE_OPTIONS=--openssl-legacy-provider
+      
+    command: npm run serve
+    volumes:
+      - ./frontend/src:/app/src
+    ports:
+      - "3000:3000"
+      - "9229:9229"
+
+  proxy:
+    build: ./nginx
+    hostname: proxy
+    ports:
+    - '8800:80'
+    depends_on:
+      - api
+      - web

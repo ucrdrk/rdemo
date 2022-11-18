@@ -1,0 +1,23 @@
+[
+{
+    "model": "api.foo",
+    "pk": 1,
+    "fields": {
+        "name": "eek"
+    }
+},
+{
+    "model": "api.foo",
+    "pk": 2,
+    "fields": {
+        "name": "aaaaah!"
+    }
+},
+{
+    "model": "api.foo",
+    "pk": 3,
+    "fields": {
+        "name": "aaaaarghhh!"
+    }
+}
+]
